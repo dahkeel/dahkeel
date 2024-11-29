@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحقيق الأرباح</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            text-align: center;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        .earnings-table {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 400px;
+            border-collapse: collapse;
+        }
+
+        .earnings-table th, .earnings-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        .earnings-table th {
+            background-color: #f8f9fa;
+            color: #333;
+            text-align: left;
+        }
+
+        .earnings-table td {
+            text-align: right;
+            color: #007bff;
+        }
+
+        .video-container {
+            margin: 20px auto;
+            max-width: 560px;
+            position: relative;
+        }
+
+        #videoPlayer {
+            width: 100%;
+            height: 315px;
+            background-color: #000;
+        }
+
+        .start-button, .next-button, .bottom-bar button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .start-button:hover, .next-button:hover, .bottom-bar button:hover {
+            background-color: #0056b3;
+        }
+
+        .next-button {
+            display: none;
+        }
+
+        .timer {
+            font-size: 18px;
+            margin: 10px;
+            color: #ff0000;
+        }
+
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #007bff;
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .bottom-bar button {
+            flex: 1;
+            margin: 0 5px;
+            color: #fff;
+            background-color: #0056b3;
+        }
+
+        .bottom-bar button:hover {
+            background-color: #003d7a;
+        }
+    </style>
+</head>
+<body>
+    <h1>تحقيق الأرباح: <span id="counter">20 / 0</span></h1>
+
+    <table class="earnings-table">
+        <tr>
+            <th>أرباح اليوم</th>
+            <td id="todayEarnings">0 USDT</td>
+        </tr>
+        <tr>
+            <th>أرباح المشاهدات</th>
+            <td id="viewEarnings">0 USDT</td>
+        </tr>
+        <tr>
+            <th>أرباح الإحالة</th>
+            <td id="referralEarnings">0 USDT</td>
+        </tr>
+    </table>
+
+    <div class="video-container">
+        <iframe id="videoPlayer" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <button class="start-button" id="startButton" onclick="startVideo()">ابدأ</button>
+        <div class="timer" id="timer">الوقت متبقي: 20ثواني</div>
+        <button class="next-button" id="nextButton" onclick="nextVideo()">التالي</button>
+    </div>
+
+    <div class="bottom-bar">
+        <button onclick="window.location.href='https://dev-dbnmidea.pantheonsite.io/1a/%D8%A7%D9%81%D8%A7%D9%82%20%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3%D9%8A%D8%A9.html'">الرئيسية</button>
+        <button onclick="window.location.href='https://dev-dbnmidea.pantheonsite.io/1a/%D8%A7%D9%84%D8%A7%D8%B1%D8%A8%D8%A7%D8%AD.html'">المهام</button>
+        <button onclick="window.location.href='https://dev-dbnmidea.pantheonsite.io/1a/DBNR.html'">خاصتي</button>
+    </div>
+
+    <script>
+        let videoCount = 0;
+        const totalVideos = 20;
+        const nextButton = document.getElementById("nextButton");
+        const startButton = document.getElementById("startButton");
+        const videoPlayer = document.getElementById("videoPlayer");
+        const timerDisplay = document.getElementById("timer");
+        const todayEarningsDisplay = document.getElementById("todayEarnings");
+        const viewEarningsDisplay = document.getElementById("viewEarnings");
+        let countdownInterval;
+        let todayEarnings = 0;
+        let viewEarnings = 0;
+
+        const videoLinks = [
+            "https://www.youtube.com/embed/3fumBcKC6RE",
+            "https://www.youtube.com/embed/2Vv-BfVoq4g",
+            "https://www.youtube.com/embed/7wtG0Wb8nY4",
+            "https://www.youtube.com/embed/ktvTqknDobU",
+            "https://www.youtube.com/embed/9bZkp7q19f0",
+            "https://www.youtube.com/embed/RgKAFK5djSk",
+            "https://www.youtube.com/embed/5qap5aO4i9A",
+            "https://www.youtube.com/embed/8UVNT4wvIGY",
+            "https://www.youtube.com/embed/2lY0g8T5K0g",
+            "https://www.youtube.com/embed/0KSOMA3QBU0",
+            "https://www.youtube.com/embed/4fndeDfaWCg",
+            "https://www.youtube.com/embed/1h8d7R7u1xM",
+            "https://www.youtube.com/embed/6v2L2UGZJmI",
+            "https://www.youtube.com/embed/3JZ_D3ELwOQ",
+            "https://www.youtube.com/embed/9bZkp7q19f0",
+            "https://www.youtube.com/embed/2Vv-BfVoq4g",
+            "https://www.youtube.com/embed/8xg8G9f2D3g",
+            "https://www.youtube.com/embed/2Vv-BfVoq4g",
+            "https://www.youtube.com/embed/6v2L2UGZJmI",
+            "https://www.youtube.com/embed/3JZ_D3ELwOQ"
+        ];
+
+        function loadRandomVideo() {
+            const randomIndex = Math.floor(Math.random() * videoLinks.length);
+            videoPlayer.src = videoLinks[randomIndex];
+        }
+
+        function updateCounter() {
+            document.getElementById("counter").textContent = `${totalVideos} / ${videoCount}`;
+        }
+
+        function startVideo() {
+            startButton.style.display = "none";
+            loadRandomVideo();
+            startVideoTimer();
+        }
+
+        function startVideoTimer() {
+            let remainingTime = 20;
+            timerDisplay.textContent = `الوقت المتبقي: ${remainingTime} ثواني`;
+
+            countdownInterval = setInterval(() => {
+                remainingTime--;
+                timerDisplay.textContent = `الوقت المتبقي: ${remainingTime} ثواني`;
+
+                if (remainingTime <= 0) {
+                    clearInterval(countdownInterval);
+                    nextButton.style.display = "block";
+                    addEarnings();
+                }
+            }, 1000);
+        }
+
+        function addEarnings() {
+            viewEarnings +=0.5;
+            todayEarnings +=0.5;
+            viewEarningsDisplay.textContent = `${viewEarnings} USDT`;
+            todayEarningsDisplay.textContent = `${todayEarnings} USDT`;
+        }
+
+        function nextVideo() {
+            videoCount++;
+            updateCounter();
+
+            if (videoCount < totalVideos) {
+                clearInterval(countdownInterval);
+                loadRandomVideo();
+                nextButton.style.display = "none";
+                startVideoTimer();
+            } else {
+                document.querySelector(".video-container").style.display = "none";
+                alert("ليس هنالك المزيد لهذا اليوم. عد غدًا وحقق أرباح أكثر.");
+            }
+        }
+    </script>
+</body>
+</html>
